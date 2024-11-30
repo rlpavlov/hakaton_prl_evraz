@@ -9,5 +9,14 @@
 
 Отчет по анализу архива выгружается в файле report_many.pdf
 Отчет по анализу отдельного файла выгружается в файле report_one.pdf
+Используемые технологии: Python 3.12 + библиотеки:
+aiogram==3.11.0
+python-decouple~=3.8
+telebot~=0.0.5
+requests~=2.31.0
+rarfile
+py7zr
+requests
+fpdf
 
 Автор: Павлов Р.Л.
