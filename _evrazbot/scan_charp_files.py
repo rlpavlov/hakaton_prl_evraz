@@ -3,15 +3,22 @@ import zipfile
 import os
 import tempfile
 
-def check_comments(file_path):
+def check_comments(file_path, file_bytes=""):
     """Проверка наличия комментариев в файле C# с указанием имен классов и методов."""
     # Регулярные выражения для поиска классов, методов и комментариев
     class_pattern = re.compile(r'^\s*public\s+(?:class|struct|interface)\s+(\w+)')
     method_pattern = re.compile(r'^\s*public\s+(?:static\s+)?(?:\w+\s+)?(\w+)\s*\([^)]*\)\s*')
     comment_pattern = re.compile(r'^\s*///')
 
-    with open(file_path, 'r', encoding='utf-8') as file:
-        lines = file.readlines()
+    #with open(file_path, 'r', encoding='utf-8') as file:
+    #    lines = file.readlines()
+    if isinstance(file_bytes, bytes):
+        # Преобразование bytes в массив строк
+        string_data = file_bytes.decode('utf-8')  # Декодируем bytes в строку
+        lines = string_data.split('\n')  # Разделяем строку на массив по символу новой строки    
+    else:
+        with open(file_path, "r", encoding="utf-8") as file:
+            lines = file.readlines()
 
     results = []
     for i, line in enumerate(lines):
@@ -38,7 +45,7 @@ def check_comments(file_path):
                     "filepath": file_path,
                     "file": os.path.basename(file_path),
                     "line": i + 1,
-                    "description": f"Нет комментария к классу '{class_name}'"
+                    "description": f"Нет комментария к методу '{method_name}'"
                 })
     return results
 

@@ -18,7 +18,7 @@ review_comment_regex = r"// <REVIEW>(.*)</REVIEW>"  # Комментарии с 
 review_comments = []
 
 # Функция для анализа файла
-def analyze_file(file_path):
+def check_comments(file_path, file_bytes=""):
     problems = []
     file_name = os.path.basename(file_path)
     if(is_camel_case(file_name)):
@@ -29,8 +29,15 @@ def analyze_file(file_path):
             "description": f"Неверное имя файла (должно быть в CamelCase) для {file_name}"    
         })
     
-    with open(file_path, "r", encoding="utf-8") as file:
-        lines = file.readlines()
+    #with open(file_path, "r", encoding="utf-8") as file:
+    #    lines = file.readlines()
+    if isinstance(file_bytes, bytes):
+        # Преобразование bytes в массив строк
+        string_data = file_bytes.decode('utf-8')  # Декодируем bytes в строку
+        lines = string_data.split('\n')  # Разделяем строку на массив по символу новой строки    
+    else:
+        with open(file_path, "r", encoding="utf-8") as file:
+            lines = file.readlines()
     
     # Поиск комментариев <REVIEW>
     for index, line in enumerate(lines):
@@ -80,7 +87,7 @@ def scan_directory(directory):
     for root, _, files in os.walk(directory):
         for file in files:
             if file.endswith(".ts") or file.endswith(".tsx"):
-                analyze_file(os.path.join(root, file))
+                check_comments(os.path.join(root, file))
 
 # Функция для записи результатов в файл
 def write_results_to_file():

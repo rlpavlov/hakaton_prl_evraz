@@ -8,6 +8,11 @@ from fpdf import FPDF
 import os
 import re
 
+# Функция uniP: возвращает подстроку, используя разделитель
+def uniP(a_string, a_delimiter, a_start_pos, a_end_pos):
+    parts = a_string.split(a_delimiter)
+    return a_delimiter.join(parts[a_start_pos - 1:a_end_pos])
+
 def is_camel_case(filepath: str) -> bool:
     """
     Проверяет, соответствует ли имя файла в указанном пути нотации CamelCase.
